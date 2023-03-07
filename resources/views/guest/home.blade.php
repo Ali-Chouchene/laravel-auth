@@ -12,7 +12,7 @@
         <h3 class="my-3">
             A JR. Web Developer .....
         </h3>
-        <a class="btn btn-blue mt-4" href="#"><strong>PROJECTS</strong></a>
+        <a class="btn btn-blue mt-4" href="{{route('admin.projects.index') }}"><strong>PROJECTS</strong></a>
     </div>
     <div></div>
 </div>

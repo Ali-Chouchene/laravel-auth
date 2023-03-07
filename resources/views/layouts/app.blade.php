@@ -53,7 +53,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{url('/') }}">
+                            <a class="nav-link" href="{{route('admin.projects.index') }}">
                                 <h4>{{ __('Projects') }}</h4>
                             </a>
                         </li>
