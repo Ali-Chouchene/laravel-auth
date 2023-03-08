@@ -30,7 +30,11 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $project = new Project();
+        $project->fill($data);
+        $project->save();
+        return to_route('admin.projects.show', $project->id);
     }
 
     /**
@@ -44,17 +48,24 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(string $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = $request->all();
+        $project = new Project();
+
+        $project->fill($data);
+        $project->save();
+
+        return redirect()->route('admin.projects.show', $project->id);
     }
 
     /**
@@ -62,6 +73,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->route('admin.projects.index');
     }
 }
