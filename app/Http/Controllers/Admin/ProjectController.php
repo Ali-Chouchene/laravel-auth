@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -30,6 +31,25 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|unique:projects|max:60',
+            'description' => 'required|string|min:30',
+            'image' => 'nullable|url',
+            'link' => 'required|url|unique:projects'
+        ], [
+            'name.required' => 'Project name is required',
+            'name.unique' => "$request->name name is already taken",
+            'name.max' => 'The project name max length is 60 characters',
+            'image.url' => 'The image must be an URL',
+            'description.required' => 'Project description is required',
+            'description.min' => 'The project description min length is 30 characters',
+            'link.required' => 'Project link is required',
+            'link.url' => 'The link must be an URL',
+            'link.unique' => "The project Link exist already",
+
+        ]);
+
+
         $data = $request->all();
         $project = new Project();
         $project->fill($data);
@@ -57,10 +77,28 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
+        $request->validate([
+            'name' => ['required', 'string', Rule::unique('projects')->ignore($project->id), 'max:60'],
+            'description' => 'required|string|min:30',
+            'image' => 'nullable|url',
+            'link' => 'required|url|unique:projects'
+        ], [
+            'name.required' => 'Project name is required',
+            'name.unique' => "$request->name name is already taken",
+            'name.max' => 'The project name max length is 60 characters',
+            'image.url' => 'The image must be an URL',
+            'description.required' => 'Project description is required',
+            'description.min' => 'The project description min length is 30 characters',
+            'link.required' => 'Project link is required',
+            'link.url' => 'The link must be an URL',
+            'link.unique' => "The project Link exist already",
+
+        ]);
+
+
         $data = $request->all();
-        $project = new Project();
 
         $project->fill($data);
         $project->save();
