@@ -4,9 +4,9 @@
 
 <div class="container">
     <div>
-        <h1 class="my-5">Create New Project</h1>
+        <h1 class="my-5">Edit Project</h1>
     </div>
-    <form class="w-50" action="{{ route('admin.projects.update', $project->id) }}" method="POST" novalidate>
+    <form class="w-50" action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf
         <div class="mb-3">
@@ -16,8 +16,11 @@
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>
-            <input type="text" class="form-control" id="image" name="image" value="{{ old('image', $project->image) }}">
-            <div id="image" class="form-text">Here you can wrigth the project image</div>
+            <input type="file" class="form-control" id="image" name="image">
+            <div class="form-text">Here you can add the project image</div>
+            <div class="d-flex pt-3 justify-content-center">
+                <img id="output_img" src="{{$project->image ? asset('storage/' . $project->image) : asset('storage/' . 'project/AfqRHPmTchC3tIJmSb634zwjXuVFQQKqRBXR7e31.png') }}" class="img-fluid square" alt="">
+            </div>
         </div>
         <div class="mb-3">
             <label for="link" class="form-label">Link</label>
@@ -33,3 +36,20 @@
 </div>
 
 @endsection
+
+<script>
+    const placeholder = 'project/AfqRHPmTchC3tIJmSb634zwjXuVFQQKqRBXR7e31.png';
+
+    const imageInput = document.getElementById("image");
+    const imageOutput = document.getElementById('output_img');
+
+    imageInput.addEventListener('change', () => {
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+            reader.readAsDataURL(imageInput.files[0]);
+            reader.onload = e => {
+                imageOutput.setAttribute('src', e.target.result);
+            }
+        } else imageOutput.src = placeholder;
+    });
+</script>

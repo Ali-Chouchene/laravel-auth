@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -34,13 +37,14 @@ class ProjectController extends Controller
         $request->validate([
             'name' => 'required|string|unique:projects|max:60',
             'description' => 'required|string|min:30',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp,jfif',
             'link' => 'required|url|unique:projects'
         ], [
             'name.required' => 'Project name is required',
             'name.unique' => "$request->name name is already taken",
             'name.max' => 'The project name max length is 60 characters',
-            'image.url' => 'The image must be an URL',
+            'image.image' => 'The file must be an image',
+            'image.mimes' => 'The file extension need to be (jpeg, jpg, png, webp, jfif)',
             'description.required' => 'Project description is required',
             'description.min' => 'The project description min length is 30 characters',
             'link.required' => 'Project link is required',
@@ -52,6 +56,10 @@ class ProjectController extends Controller
 
         $data = $request->all();
         $project = new Project();
+        if (Arr::exists($data, 'image')) {
+            $img_url = Storage::put('project', $data['image']);
+            $data['image'] = $img_url;
+        };
         $project->fill($data);
         $project->save();
         return to_route('admin.projects.show', $project->id);
@@ -82,13 +90,14 @@ class ProjectController extends Controller
         $request->validate([
             'name' => ['required', 'string', Rule::unique('projects')->ignore($project->id), 'max:60'],
             'description' => 'required|string|min:30',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,webp,jfif',
             'link' => 'required|url|unique:projects'
         ], [
             'name.required' => 'Project name is required',
             'name.unique' => "$request->name name is already taken",
             'name.max' => 'The project name max length is 60 characters',
-            'image.url' => 'The image must be an URL',
+            'image.image' => 'The file must be an image',
+            'image.mimes' => 'The file extension need to be (jpeg, jpg, png, webp, jfif)',
             'description.required' => 'Project description is required',
             'description.min' => 'The project description min length is 30 characters',
             'link.required' => 'Project link is required',
@@ -99,6 +108,11 @@ class ProjectController extends Controller
 
 
         $data = $request->all();
+        if (Arr::exists($data, 'image')) {
+            if ($project->image) Storage::delete($project->image);
+            $img_url = Storage::put('project', $data['image']);
+            $data['image'] = $img_url;
+        };
 
         $project->fill($data);
         $project->save();

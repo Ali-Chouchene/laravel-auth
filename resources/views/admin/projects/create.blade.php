@@ -6,7 +6,7 @@
     <div>
         <h1 class="my-5">Create New Project</h1>
     </div>
-    <form class="w-50" action="{{ route('admin.projects.store') }}" method="POST" novalidate>
+    <form class="w-50" action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Project Name</label>
@@ -15,8 +15,8 @@
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Image</label>
-            <input required value="{{ old('image') }}" type="text" class="form-control" id="image" name="image">
-            <div id="image" class="form-text">Here you can wrigth the project image</div>
+            <input required value="{{ old('image') }}" type="file" class="form-control" id="image" name="image">
+            <div id="image" class="form-text">Here you can add the project image</div>
         </div>
         <div class="mb-3">
             <label for="link" class="form-label">Link</label>

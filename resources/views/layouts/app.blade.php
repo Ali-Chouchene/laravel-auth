@@ -30,7 +30,7 @@
 <body>
     <div id="app">
         @include('includes.header')
-        <div class="container mt-4">
+        <div class="container">
             @if($errors->any())
             <div class="alert alert-danger">
                 <ul>

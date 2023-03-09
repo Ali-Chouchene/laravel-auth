@@ -7,7 +7,7 @@
     <div class=" d-flex  justify-content-center">
         <div class="card d-flex flex-column align-items-center my-3 p-5 text-center" style="width: 80%;">
             <div>
-                <img src="{{$project->image}}" class="card-img-top float-start mx-2" alt="{{$project->name}}" style="width: 60%; height: 30rem;">
+                <img src="{{asset('storage/' . $project->image)}}" class="card-img-top img-fluid float-start mx-2" alt="{{$project->name}}" style="width: 60%; height: 30rem;">
                 <p class="card-text my-4">{{$project->description}}</p>
                 <div class="d-flex justify-content-around align-items-bottom">
                     <a href="{{route('admin.projects.edit', $project->id)}}" class="btn btn-warning text-light px-4"><i class="fa-solid fa-pen-to-square fa-xl me-2"></i>Edit</a>
